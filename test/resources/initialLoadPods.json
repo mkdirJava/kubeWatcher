@@ -1,0 +1,749 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "checksum/configuration": "8105dd08d2ac599f21a5ded49de098ca17f5c2c7c625d0872055ceadf48bf850"
+                },
+                "creationTimestamp": "2024-06-08T03:46:12Z",
+                "generateName": "mysql-1717818371-",
+                "labels": {
+                    "app.kubernetes.io/component": "primary",
+                    "app.kubernetes.io/instance": "mysql-1717818371",
+                    "app.kubernetes.io/managed-by": "Helm",
+                    "app.kubernetes.io/name": "mysql",
+                    "app.kubernetes.io/version": "8.4.0",
+                    "controller-revision-hash": "mysql-1717818371-5c7c6766b4",
+                    "helm.sh/chart": "mysql-11.1.2",
+                    "statefulset.kubernetes.io/pod-name": "mysql-1717818371-0"
+                },
+                "name": "mysql-1717818371-0",
+                "namespace": "default",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "StatefulSet",
+                        "name": "mysql-1717818371",
+                        "uid": "6d94a263-930c-4146-85aa-423275f01734"
+                    }
+                ],
+                "resourceVersion": "64880",
+                "uid": "de9442f9-1644-405b-99fa-e0250450cee4"
+            },
+            "spec": {
+                "affinity": {
+                    "podAntiAffinity": {
+                        "preferredDuringSchedulingIgnoredDuringExecution": [
+                            {
+                                "podAffinityTerm": {
+                                    "labelSelector": {
+                                        "matchLabels": {
+                                            "app.kubernetes.io/instance": "mysql-1717818371",
+                                            "app.kubernetes.io/name": "mysql"
+                                        }
+                                    },
+                                    "topologyKey": "kubernetes.io/hostname"
+                                },
+                                "weight": 1
+                            }
+                        ]
+                    }
+                },
+                "automountServiceAccountToken": false,
+                "containers": [
+                    {
+                        "env": [
+                            {
+                                "name": "BITNAMI_DEBUG",
+                                "value": "false"
+                            },
+                            {
+                                "name": "MYSQL_ROOT_PASSWORD",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "key": "mysql-root-password",
+                                        "name": "mysql-1717818371"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "MYSQL_PORT",
+                                "value": "3306"
+                            },
+                            {
+                                "name": "MYSQL_DATABASE",
+                                "value": "my_database"
+                            }
+                        ],
+                        "image": "docker.io/bitnami/mysql:8.4.0-debian-12-r3",
+                        "imagePullPolicy": "IfNotPresent",
+                        "livenessProbe": {
+                            "exec": {
+                                "command": [
+                                    "/bin/bash",
+                                    "-ec",
+                                    "password_aux=\"${MYSQL_ROOT_PASSWORD:-}\"\nif [[ -f \"${MYSQL_ROOT_PASSWORD_FILE:-}\" ]]; then\n    password_aux=$(cat \"$MYSQL_ROOT_PASSWORD_FILE\")\nfi\nmysqladmin status -uroot -p\"${password_aux}\"\n"
+                                ]
+                            },
+                            "failureThreshold": 3,
+                            "initialDelaySeconds": 5,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 1
+                        },
+                        "name": "mysql",
+                        "ports": [
+                            {
+                                "containerPort": 3306,
+                                "name": "mysql",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "readinessProbe": {
+                            "exec": {
+                                "command": [
+                                    "/bin/bash",
+                                    "-ec",
+                                    "password_aux=\"${MYSQL_ROOT_PASSWORD:-}\"\nif [[ -f \"${MYSQL_ROOT_PASSWORD_FILE:-}\" ]]; then\n    password_aux=$(cat \"$MYSQL_ROOT_PASSWORD_FILE\")\nfi\nmysqladmin ping -uroot -p\"${password_aux}\"\n"
+                                ]
+                            },
+                            "failureThreshold": 3,
+                            "initialDelaySeconds": 5,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 1
+                        },
+                        "resources": {
+                            "limits": {
+                                "cpu": "750m",
+                                "ephemeral-storage": "1Gi",
+                                "memory": "768Mi"
+                            },
+                            "requests": {
+                                "cpu": "500m",
+                                "ephemeral-storage": "50Mi",
+                                "memory": "512Mi"
+                            }
+                        },
+                        "securityContext": {
+                            "allowPrivilegeEscalation": false,
+                            "capabilities": {
+                                "drop": [
+                                    "ALL"
+                                ]
+                            },
+                            "readOnlyRootFilesystem": true,
+                            "runAsGroup": 1001,
+                            "runAsNonRoot": true,
+                            "runAsUser": 1001,
+                            "seLinuxOptions": {},
+                            "seccompProfile": {
+                                "type": "RuntimeDefault"
+                            }
+                        },
+                        "startupProbe": {
+                            "exec": {
+                                "command": [
+                                    "/bin/bash",
+                                    "-ec",
+                                    "password_aux=\"${MYSQL_ROOT_PASSWORD:-}\"\nif [[ -f \"${MYSQL_ROOT_PASSWORD_FILE:-}\" ]]; then\n    password_aux=$(cat \"$MYSQL_ROOT_PASSWORD_FILE\")\nfi\nmysqladmin ping -uroot -p\"${password_aux}\"\n"
+                                ]
+                            },
+                            "failureThreshold": 10,
+                            "initialDelaySeconds": 15,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 1
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/bitnami/mysql",
+                                "name": "data"
+                            },
+                            {
+                                "mountPath": "/tmp",
+                                "name": "empty-dir",
+                                "subPath": "tmp-dir"
+                            },
+                            {
+                                "mountPath": "/opt/bitnami/mysql/conf",
+                                "name": "empty-dir",
+                                "subPath": "app-conf-dir"
+                            },
+                            {
+                                "mountPath": "/opt/bitnami/mysql/tmp",
+                                "name": "empty-dir",
+                                "subPath": "app-tmp-dir"
+                            },
+                            {
+                                "mountPath": "/opt/bitnami/mysql/logs",
+                                "name": "empty-dir",
+                                "subPath": "app-logs-dir"
+                            },
+                            {
+                                "mountPath": "/opt/bitnami/mysql/conf/my.cnf",
+                                "name": "config",
+                                "subPath": "my.cnf"
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "hostname": "mysql-1717818371-0",
+                "initContainers": [
+                    {
+                        "args": [
+                            "-ec",
+                            "#!/bin/bash\n\n. /opt/bitnami/scripts/libfs.sh\n# We copy the logs folder because it has symlinks to stdout and stderr\nif ! is_dir_empty /opt/bitnami/mysql/logs; then\n  cp -r /opt/bitnami/mysql/logs /emptydir/app-logs-dir\nfi\n"
+                        ],
+                        "command": [
+                            "/bin/bash"
+                        ],
+                        "image": "docker.io/bitnami/mysql:8.4.0-debian-12-r3",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "preserve-logs-symlinks",
+                        "resources": {
+                            "limits": {
+                                "cpu": "750m",
+                                "ephemeral-storage": "1Gi",
+                                "memory": "768Mi"
+                            },
+                            "requests": {
+                                "cpu": "500m",
+                                "ephemeral-storage": "50Mi",
+                                "memory": "512Mi"
+                            }
+                        },
+                        "securityContext": {
+                            "allowPrivilegeEscalation": false,
+                            "capabilities": {
+                                "drop": [
+                                    "ALL"
+                                ]
+                            },
+                            "readOnlyRootFilesystem": true,
+                            "runAsGroup": 1001,
+                            "runAsNonRoot": true,
+                            "runAsUser": 1001,
+                            "seLinuxOptions": {},
+                            "seccompProfile": {
+                                "type": "RuntimeDefault"
+                            }
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/emptydir",
+                                "name": "empty-dir"
+                            }
+                        ]
+                    }
+                ],
+                "nodeName": "docker-desktop",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {
+                    "fsGroup": 1001,
+                    "fsGroupChangePolicy": "Always"
+                },
+                "serviceAccount": "mysql-1717818371",
+                "serviceAccountName": "mysql-1717818371",
+                "subdomain": "mysql-1717818371",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "data",
+                        "persistentVolumeClaim": {
+                            "claimName": "data-mysql-1717818371-0"
+                        }
+                    },
+                    {
+                        "configMap": {
+                            "defaultMode": 420,
+                            "name": "mysql-1717818371"
+                        },
+                        "name": "config"
+                    },
+                    {
+                        "emptyDir": {},
+                        "name": "empty-dir"
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-06-08T03:46:46Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-06-08T03:47:03Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-06-08T03:47:03Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-06-08T03:46:13Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "docker://36bc555e82e630dbcf4e48e4747c53835109e78263f259821cd772db99ed0669",
+                        "image": "bitnami/mysql:8.4.0-debian-12-r3",
+                        "imageID": "docker-pullable://bitnami/mysql@sha256:3594854f53d90497601c9ccff37d61819978fe37b348f6abff8c08b0f4c63dd1",
+                        "lastState": {},
+                        "name": "mysql",
+                        "ready": true,
+                        "restartCount": 0,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2024-06-08T03:46:46Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.65.3",
+                "initContainerStatuses": [
+                    {
+                        "containerID": "docker://07d22d8ba09c152ef6d3db4d65533964f1c06d0d21832269582c14c68fb60585",
+                        "image": "bitnami/mysql:8.4.0-debian-12-r3",
+                        "imageID": "docker-pullable://bitnami/mysql@sha256:3594854f53d90497601c9ccff37d61819978fe37b348f6abff8c08b0f4c63dd1",
+                        "lastState": {},
+                        "name": "preserve-logs-symlinks",
+                        "ready": true,
+                        "restartCount": 0,
+                        "state": {
+                            "terminated": {
+                                "containerID": "docker://07d22d8ba09c152ef6d3db4d65533964f1c06d0d21832269582c14c68fb60585",
+                                "exitCode": 0,
+                                "finishedAt": "2024-06-08T03:46:46Z",
+                                "reason": "Completed",
+                                "startedAt": "2024-06-08T03:46:46Z"
+                            }
+                        }
+                    }
+                ],
+                "phase": "Running",
+                "podIP": "10.1.2.114",
+                "podIPs": [
+                    {
+                        "ip": "10.1.2.114"
+                    }
+                ],
+                "qosClass": "Burstable",
+                "startTime": "2024-06-08T03:46:13Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "checksum/configuration": "8105dd08d2ac599f21a5ded49de098ca17f5c2c7c625d0872055ceadf48bf850"
+                },
+                "creationTimestamp": "2025-06-09T03:46:00Z",
+                "generateName": "pod2",
+                "labels": {
+                    "app.kubernetes.io/component": "primary",
+                    "app.kubernetes.io/instance": "mysql-1717818371",
+                    "app.kubernetes.io/managed-by": "Helm",
+                    "app.kubernetes.io/name": "mysql",
+                    "app.kubernetes.io/version": "8.4.0",
+                    "controller-revision-hash": "mysql-1717818371-5c7c6766b4",
+                    "helm.sh/chart": "mysql-11.1.2",
+                    "statefulset.kubernetes.io/pod-name": "mysql-1717818371-0"
+                },
+                "name": "pod2",
+                "namespace": "default",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "StatefulSet",
+                        "name": "mysql-1717818371",
+                        "uid": "6d94a263-930c-4146-85aa-423275f01734"
+                    }
+                ],
+                "resourceVersion": "64880",
+                "uid": "de9442f9-1644-405b-99fa-e0250450cee4"
+            },
+            "spec": {
+                "affinity": {
+                    "podAntiAffinity": {
+                        "preferredDuringSchedulingIgnoredDuringExecution": [
+                            {
+                                "podAffinityTerm": {
+                                    "labelSelector": {
+                                        "matchLabels": {
+                                            "app.kubernetes.io/instance": "mysql-1717818371",
+                                            "app.kubernetes.io/name": "mysql"
+                                        }
+                                    },
+                                    "topologyKey": "kubernetes.io/hostname"
+                                },
+                                "weight": 1
+                            }
+                        ]
+                    }
+                },
+                "automountServiceAccountToken": false,
+                "containers": [
+                    {
+                        "env": [
+                            {
+                                "name": "BITNAMI_DEBUG",
+                                "value": "false"
+                            },
+                            {
+                                "name": "MYSQL_ROOT_PASSWORD",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "key": "mysql-root-password",
+                                        "name": "mysql-1717818371"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "MYSQL_PORT",
+                                "value": "3306"
+                            },
+                            {
+                                "name": "MYSQL_DATABASE",
+                                "value": "my_database"
+                            }
+                        ],
+                        "image": "docker.io/bitnami/mysql:8.4.0-debian-12-r3",
+                        "imagePullPolicy": "IfNotPresent",
+                        "livenessProbe": {
+                            "exec": {
+                                "command": [
+                                    "/bin/bash",
+                                    "-ec",
+                                    "password_aux=\"${MYSQL_ROOT_PASSWORD:-}\"\nif [[ -f \"${MYSQL_ROOT_PASSWORD_FILE:-}\" ]]; then\n    password_aux=$(cat \"$MYSQL_ROOT_PASSWORD_FILE\")\nfi\nmysqladmin status -uroot -p\"${password_aux}\"\n"
+                                ]
+                            },
+                            "failureThreshold": 3,
+                            "initialDelaySeconds": 5,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 1
+                        },
+                        "name": "mysql",
+                        "ports": [
+                            {
+                                "containerPort": 3306,
+                                "name": "mysql",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "readinessProbe": {
+                            "exec": {
+                                "command": [
+                                    "/bin/bash",
+                                    "-ec",
+                                    "password_aux=\"${MYSQL_ROOT_PASSWORD:-}\"\nif [[ -f \"${MYSQL_ROOT_PASSWORD_FILE:-}\" ]]; then\n    password_aux=$(cat \"$MYSQL_ROOT_PASSWORD_FILE\")\nfi\nmysqladmin ping -uroot -p\"${password_aux}\"\n"
+                                ]
+                            },
+                            "failureThreshold": 3,
+                            "initialDelaySeconds": 5,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 1
+                        },
+                        "resources": {
+                            "limits": {
+                                "cpu": "750m",
+                                "ephemeral-storage": "1Gi",
+                                "memory": "768Mi"
+                            },
+                            "requests": {
+                                "cpu": "500m",
+                                "ephemeral-storage": "50Mi",
+                                "memory": "512Mi"
+                            }
+                        },
+                        "securityContext": {
+                            "allowPrivilegeEscalation": false,
+                            "capabilities": {
+                                "drop": [
+                                    "ALL"
+                                ]
+                            },
+                            "readOnlyRootFilesystem": true,
+                            "runAsGroup": 1001,
+                            "runAsNonRoot": true,
+                            "runAsUser": 1001,
+                            "seLinuxOptions": {},
+                            "seccompProfile": {
+                                "type": "RuntimeDefault"
+                            }
+                        },
+                        "startupProbe": {
+                            "exec": {
+                                "command": [
+                                    "/bin/bash",
+                                    "-ec",
+                                    "password_aux=\"${MYSQL_ROOT_PASSWORD:-}\"\nif [[ -f \"${MYSQL_ROOT_PASSWORD_FILE:-}\" ]]; then\n    password_aux=$(cat \"$MYSQL_ROOT_PASSWORD_FILE\")\nfi\nmysqladmin ping -uroot -p\"${password_aux}\"\n"
+                                ]
+                            },
+                            "failureThreshold": 10,
+                            "initialDelaySeconds": 15,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 1
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/bitnami/mysql",
+                                "name": "data"
+                            },
+                            {
+                                "mountPath": "/tmp",
+                                "name": "empty-dir",
+                                "subPath": "tmp-dir"
+                            },
+                            {
+                                "mountPath": "/opt/bitnami/mysql/conf",
+                                "name": "empty-dir",
+                                "subPath": "app-conf-dir"
+                            },
+                            {
+                                "mountPath": "/opt/bitnami/mysql/tmp",
+                                "name": "empty-dir",
+                                "subPath": "app-tmp-dir"
+                            },
+                            {
+                                "mountPath": "/opt/bitnami/mysql/logs",
+                                "name": "empty-dir",
+                                "subPath": "app-logs-dir"
+                            },
+                            {
+                                "mountPath": "/opt/bitnami/mysql/conf/my.cnf",
+                                "name": "config",
+                                "subPath": "my.cnf"
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "hostname": "mysql-1717818371-0",
+                "initContainers": [
+                    {
+                        "args": [
+                            "-ec",
+                            "#!/bin/bash\n\n. /opt/bitnami/scripts/libfs.sh\n# We copy the logs folder because it has symlinks to stdout and stderr\nif ! is_dir_empty /opt/bitnami/mysql/logs; then\n  cp -r /opt/bitnami/mysql/logs /emptydir/app-logs-dir\nfi\n"
+                        ],
+                        "command": [
+                            "/bin/bash"
+                        ],
+                        "image": "docker.io/bitnami/mysql:8.4.0-debian-12-r3",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "preserve-logs-symlinks",
+                        "resources": {
+                            "limits": {
+                                "cpu": "750m",
+                                "ephemeral-storage": "1Gi",
+                                "memory": "768Mi"
+                            },
+                            "requests": {
+                                "cpu": "500m",
+                                "ephemeral-storage": "50Mi",
+                                "memory": "512Mi"
+                            }
+                        },
+                        "securityContext": {
+                            "allowPrivilegeEscalation": false,
+                            "capabilities": {
+                                "drop": [
+                                    "ALL"
+                                ]
+                            },
+                            "readOnlyRootFilesystem": true,
+                            "runAsGroup": 1001,
+                            "runAsNonRoot": true,
+                            "runAsUser": 1001,
+                            "seLinuxOptions": {},
+                            "seccompProfile": {
+                                "type": "RuntimeDefault"
+                            }
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/emptydir",
+                                "name": "empty-dir"
+                            }
+                        ]
+                    }
+                ],
+                "nodeName": "docker-desktop",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {
+                    "fsGroup": 1001,
+                    "fsGroupChangePolicy": "Always"
+                },
+                "serviceAccount": "mysql-1717818371",
+                "serviceAccountName": "mysql-1717818371",
+                "subdomain": "mysql-1717818371",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "data",
+                        "persistentVolumeClaim": {
+                            "claimName": "data-mysql-1717818371-0"
+                        }
+                    },
+                    {
+                        "configMap": {
+                            "defaultMode": 420,
+                            "name": "mysql-1717818371"
+                        },
+                        "name": "config"
+                    },
+                    {
+                        "emptyDir": {},
+                        "name": "empty-dir"
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-06-08T03:46:46Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-06-08T03:47:03Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-06-08T03:47:03Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2024-06-08T03:46:13Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "docker://36bc555e82e630dbcf4e48e4747c53835109e78263f259821cd772db99ed0669",
+                        "image": "bitnami/mysql:8.4.0-debian-12-r3",
+                        "imageID": "docker-pullable://bitnami/mysql@sha256:3594854f53d90497601c9ccff37d61819978fe37b348f6abff8c08b0f4c63dd1",
+                        "lastState": {},
+                        "name": "mysql",
+                        "ready": true,
+                        "restartCount": 0,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2024-06-08T03:46:46Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.65.3",
+                "initContainerStatuses": [
+                    {
+                        "containerID": "docker://07d22d8ba09c152ef6d3db4d65533964f1c06d0d21832269582c14c68fb60585",
+                        "image": "bitnami/mysql:8.4.0-debian-12-r3",
+                        "imageID": "docker-pullable://bitnami/mysql@sha256:3594854f53d90497601c9ccff37d61819978fe37b348f6abff8c08b0f4c63dd1",
+                        "lastState": {},
+                        "name": "preserve-logs-symlinks",
+                        "ready": true,
+                        "restartCount": 0,
+                        "state": {
+                            "terminated": {
+                                "containerID": "docker://07d22d8ba09c152ef6d3db4d65533964f1c06d0d21832269582c14c68fb60585",
+                                "exitCode": 0,
+                                "finishedAt": "2024-06-08T03:46:46Z",
+                                "reason": "Completed",
+                                "startedAt": "2024-06-08T03:46:46Z"
+                            }
+                        }
+                    }
+                ],
+                "phase": "Running",
+                "podIP": "10.1.2.114",
+                "podIPs": [
+                    {
+                        "ip": "10.1.2.114"
+                    }
+                ],
+                "qosClass": "Burstable",
+                "startTime": "2024-06-08T03:46:13Z"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}
