@@ -2,6 +2,8 @@
 
 # set -eu
 
+outputFile="$HOME/.kubeWatcher.result1"
+
 function _kubeExecuteKubeCommand(){
     eval "kubectl get pods -A --field-selector=metadata.namespace!=kube-system -o JSON"
 }
@@ -20,23 +22,31 @@ function getNewPods(){
     newState=$1
     previousState=$2
     createdPods=$(_getDiff $previousState $newState )
-    echo "CreateReport"
-    echo "$createdPods" 
+    if [ "$createdPods" != "[]" ]  
+    then 
+        echo "CreateReport" >> $outputFile
+        echo "$createdPods" >> $outputFile
+    fi
+    
 }
 
 function getDeletedPods(){
     previousState=$1
     newState=$2
     removedPods=$(_getDiff $previousState $newState)
-    echo "DeletedPods"
-    echo "$removedPods" 
+    if [ "$removedPods" != "[]" ]  
+    then 
+        echo "DeletedPods" >> $outputFile
+        echo "$removedPods" >> $outputFile
+    fi
 }
 
 function kubeWatcher(){  
     pollInterval=$1
     lastPodPoll=$(getPods)
-    echo "initial "
-    echo $lastPodPoll
+    touch $outputFile
+    echo "initial " >> "$outputFile"
+    echo $lastPodPoll >> $outputFile
     while true 
     do
         newPollResult=$(getPods)

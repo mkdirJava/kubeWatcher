@@ -22,7 +22,7 @@ place the kubeWatcher.sh on path
     eg
     kubeWatcher 5
 `
-
+The output gets printed to "~/.kubeWatcher.result1"
 ---
 To run test
 
